@@ -6,7 +6,7 @@
 /*   By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:37:55 by cfischer          #+#    #+#             */
-/*   Updated: 2022/06/22 00:53:42 by cfischer         ###   ########.fr       */
+/*   Updated: 2022/06/22 03:34:36 by cfischer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,52 @@ long int inverter(long int num)
 	}
 	res += num;
 	return res;
+}
+
+char* hex_char(int nh, char* s, char hextype)
+{
+	char* res;
+	char ada;
+	char* number;
+
+	
+	number = (char*)malloc(sizeof(char)*2);
+	number[1] = 0;
+
+	if (nh >= 0 && nh <= 9)
+		ada = '0';
+	else 
+		ada = hextype;
+
+	number[0] = ada + nh;
+	res = number;
+	if (s)
+	{
+		res = ft_strjoin(number, s);
+		free(s);
+		free(number);
+	}
+	
+	return res;
+}
+
+int hex(int num, char hextype)
+{
+	int i;
+	char* s;
+	int dex;
+
+	s = NULL;
+	while(num > 0)
+	{
+		dex = num % 16;
+		num = num / 16;
+		s = hex_char(dex, s, hextype);
+		i++;
+	}
+	ft_putstr_fd(s, 1);
+	free(s);
+	return i;
 }
 
 int checker_str(int flag, va_list ap)
@@ -89,6 +135,14 @@ int checker_num(int flag, va_list ap)
 		}
 		
 	}
+	if(flag == 'x')
+	{
+		i = hex(va_arg(ap, int), 87);
+	}
+	if(flag == 'X')
+	{
+		i = hex(va_arg(ap, int), 55);
+	}
 	return i;
 }
 
@@ -125,15 +179,6 @@ int ft_printf(const char* str, ...)
 
 int main()
 {
-	char* elegosta = "pao de queijo %s  \n"; 
-	
-	//printf("%d \n", printf(elegosta, "paozin"));
-	
-	//ft_printf(elegosta, 'a', 'd');
-
-	printf("%d \n", ft_printf("Repolho: %u \n", -2));
-	printf("%d \n", printf("Repolho: %u \n", -2));
-	
-	//ft_printf("%u \n", -2);
-	  // printf("Repolho: %c %d %i \n", 'a', 295, 2);
+	  ft_printf("Repolho: %X \n", 3123123);
+	  printf("Repolho: %X \n", 3123123);
 }
