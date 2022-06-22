@@ -6,14 +6,13 @@
 /*   By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:37:55 by cfischer          #+#    #+#             */
-/*   Updated: 2022/06/22 03:34:36 by cfischer         ###   ########.fr       */
+/*   Updated: 2022/06/22 23:38:57 by cfischer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./libft/libft.h"
 #include <stdarg.h>
 #include <unistd.h>
-
 #include <stdio.h> 
 
 long int inverter(long int num)
@@ -59,11 +58,13 @@ char* hex_char(int nh, char* s, char hextype)
 	return res;
 }
 
-int hex(int num, char hextype)
+int hex(unsigned long int num, char hextype)
 {
 	int i;
 	char* s;
 	int dex;
+
+	i = 0;
 
 	s = NULL;
 	while(num > 0)
@@ -137,11 +138,17 @@ int checker_num(int flag, va_list ap)
 	}
 	if(flag == 'x')
 	{
-		i = hex(va_arg(ap, int), 87);
+		i = hex(va_arg(ap, unsigned long int), 87);
 	}
 	if(flag == 'X')
 	{
-		i = hex(va_arg(ap, int), 55);
+		i = hex(va_arg(ap, unsigned long int), 55);
+	}
+	if(flag == 'p')
+	{
+		ft_putstr_fd("0x", 1);
+		i += 2;
+		i += hex(va_arg(ap, unsigned long int), 87);
 	}
 	return i;
 }
@@ -179,6 +186,10 @@ int ft_printf(const char* str, ...)
 
 int main()
 {
-	  ft_printf("Repolho: %X \n", 3123123);
-	  printf("Repolho: %X \n", 3123123);
+	unsigned int ptr;
+	unsigned int rtp;
+
+	ft_printf("%d \n", ft_printf("Repolho: %p \t %p\n", &ptr, &rtp));
+	  
+	printf("%d \n", printf("Repolho: %p \t %p\n", &ptr, &rtp));
 }
