@@ -6,28 +6,26 @@
 /*   By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:37:55 by cfischer          #+#    #+#             */
-/*   Updated: 2022/06/23 02:16:10 by cfischer         ###   ########.fr       */
+/*   Updated: 2022/06/23 03:14:59 by cfischer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
-int hex(unsigned long int num, char hextype)
+int	hex(unsigned long int num, char hextype)
 {
-	int i;
-	char* s;
-	int dex;
+	int		i;
+	char	*s;
+	int		dex;
 
 	i = 0;
-
 	s = NULL;
 	if (num == 0)
 	{
 		s = ft_itoa(num);
 		i = 1;
 	}
-	while(num > 0)
+	while (num > 0)
 	{
 		dex = num % 16;
 		num = num / 16;
@@ -36,101 +34,63 @@ int hex(unsigned long int num, char hextype)
 	}
 	ft_putstr_fd(s, 1);
 	free(s);
-	return i;
+	return (i);
 }
 
-int checker_str(int flag, va_list ap)
+int	checker_str(int flag, va_list ap)
 {
-	char* s;
-	int i;
-	char a;
+	int		i;
+	char	a;
+
 	i = 0;
-	
-	if(flag == 'c')
+	if (flag == 'c')
 	{
 		i = 1;
 		a = va_arg(ap, int);
-		write(1, &a, 1);
+		write (1, &a, 1);
 	}
-	if(flag == 's')
-	{
-		i = 0;
-		s = va_arg(ap, char*);
-
-		if(s == NULL)
-		{
-			ft_putstr_fd("(null)", 1);
-			i = 6;
-		}
-		if(s != NULL && *s)
-		{
-			i = ft_strlen(s);
-			ft_putstr_fd(s, 1);
-		}
-	}
-	if(flag == '%')
+	if (flag == 's')
+		i = trans_string(va_arg(ap, char *));
+	if (flag == '%')
 	{
 		i = 1;
 		ft_putchar_fd('%', 1);
 	}
-	return i;
+	return (i);
 }
 
-int checker_num(int flag, va_list ap)
+int	checker_num(int flag, va_list ap)
 {
-	int i;
-	char* s;
+	int					i;
+	char				*s;
 
 	i = 0;
-	
-	if(flag == 'd' || flag == 'i')
+	if (flag == 'd' || flag == 'i')
 	{
 		s = ft_itoa(va_arg(ap, int));
 		i = ft_strlen(s);
 		ft_putstr_fd(s, 1);
 		free(s);
 	}
-	if(flag == 'u')
-	{
+	if (flag == 'u')
 		i = trans_unsigned(va_arg(ap, int));
-		
-	}
-	if(flag == 'x')
-	{
+	if (flag == 'x')
 		i = hex(va_arg(ap, unsigned int), 87);
-	}
-	if(flag == 'X')
-	{
+	if (flag == 'X')
 		i = hex(va_arg(ap, unsigned int), 55);
-	}
-	if(flag == 'p')
-	{
-		unsigned long int nil;
-		nil = va_arg(ap, unsigned long int);
-
-		if(nil ==0)
-		{
-			ft_putstr_fd("(nil)", 1);
-			return 5;
-		}
-		ft_putstr_fd("0x", 1);
-		i += 2;
-		i += hex(nil, 87);
-	}
-	return i;
+	if (flag == 'p')
+		i = trans_adress(va_arg(ap, unsigned long int));
+	return (i);
 }
 
-int ft_printf(const char* str, ...)
+int	ft_printf(const char *str, ...)
 {
-	int i; 
-
-	va_list ap; 
+	int		i;
+	va_list	ap;
 
 	va_start(ap, str);
-
 	i = 0;
-
-	while(*str != 0)
+	while (*str != 0)
 	{
 		if (*str == '%')
 		{
@@ -147,6 +107,5 @@ int ft_printf(const char* str, ...)
 		}
 	}
 	va_end(ap);
-
-	return i;
+	return (i);
 }
