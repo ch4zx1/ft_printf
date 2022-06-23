@@ -1,62 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:37:55 by cfischer          #+#    #+#             */
-/*   Updated: 2022/06/22 23:38:57 by cfischer         ###   ########.fr       */
+/*   Updated: 2022/06/23 02:16:10 by cfischer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./libft/libft.h"
-#include <stdarg.h>
-#include <unistd.h>
-#include <stdio.h> 
-
-long int inverter(long int num)
-{
-	long int res;
-	
-	res = 0;
-
-	while(num / 10)
-	{
-		res += num % 10;
-		res = res * 10;
-		num = num / 10;
-	}
-	res += num;
-	return res;
-}
-
-char* hex_char(int nh, char* s, char hextype)
-{
-	char* res;
-	char ada;
-	char* number;
-
-	
-	number = (char*)malloc(sizeof(char)*2);
-	number[1] = 0;
-
-	if (nh >= 0 && nh <= 9)
-		ada = '0';
-	else 
-		ada = hextype;
-
-	number[0] = ada + nh;
-	res = number;
-	if (s)
-	{
-		res = ft_strjoin(number, s);
-		free(s);
-		free(number);
-	}
-	
-	return res;
-}
+#include "ft_printf.h"
+#include <stdio.h>
 
 int hex(unsigned long int num, char hextype)
 {
@@ -67,6 +22,11 @@ int hex(unsigned long int num, char hextype)
 	i = 0;
 
 	s = NULL;
+	if (num == 0)
+	{
+		s = ft_itoa(num);
+		i = 1;
+	}
 	while(num > 0)
 	{
 		dex = num % 16;
@@ -83,19 +43,30 @@ int checker_str(int flag, va_list ap)
 {
 	char* s;
 	int i;
-
+	char a;
 	i = 0;
 	
 	if(flag == 'c')
 	{
 		i = 1;
-		ft_putchar_fd(va_arg(ap, int), 1);
+		a = va_arg(ap, int);
+		write(1, &a, 1);
 	}
 	if(flag == 's')
 	{
+		i = 0;
 		s = va_arg(ap, char*);
-		i = ft_strlen(s);
-		ft_putstr_fd(s, 1);
+
+		if(s == NULL)
+		{
+			ft_putstr_fd("(null)", 1);
+			i = 6;
+		}
+		if(s != NULL && *s)
+		{
+			i = ft_strlen(s);
+			ft_putstr_fd(s, 1);
+		}
 	}
 	if(flag == '%')
 	{
@@ -107,8 +78,6 @@ int checker_str(int flag, va_list ap)
 
 int checker_num(int flag, va_list ap)
 {
-	int uepa;
-	long int ui;
 	int i;
 	char* s;
 
@@ -119,36 +88,34 @@ int checker_num(int flag, va_list ap)
 		s = ft_itoa(va_arg(ap, int));
 		i = ft_strlen(s);
 		ft_putstr_fd(s, 1);
+		free(s);
 	}
 	if(flag == 'u')
 	{
-		ui = inverter(va_arg(ap, unsigned int));
-		
-		while (ui > 0)
-		{
-			uepa = ui % 10;
-			ui = ui / 10;
-
-			s = ft_itoa(uepa);
-			i++;
-			ft_putstr_fd(s, 1);
-			free(s);
-		}
+		i = trans_unsigned(va_arg(ap, int));
 		
 	}
 	if(flag == 'x')
 	{
-		i = hex(va_arg(ap, unsigned long int), 87);
+		i = hex(va_arg(ap, unsigned int), 87);
 	}
 	if(flag == 'X')
 	{
-		i = hex(va_arg(ap, unsigned long int), 55);
+		i = hex(va_arg(ap, unsigned int), 55);
 	}
 	if(flag == 'p')
 	{
+		unsigned long int nil;
+		nil = va_arg(ap, unsigned long int);
+
+		if(nil ==0)
+		{
+			ft_putstr_fd("(nil)", 1);
+			return 5;
+		}
 		ft_putstr_fd("0x", 1);
 		i += 2;
-		i += hex(va_arg(ap, unsigned long int), 87);
+		i += hex(nil, 87);
 	}
 	return i;
 }
@@ -172,7 +139,7 @@ int ft_printf(const char* str, ...)
 			i += checker_num(*str, ap);
 			str++;
 		}
-		if (*str != '%')
+		if (*str && *str != '%')
 		{
 			ft_putchar_fd(*str, 1);
 			str++;
@@ -182,14 +149,4 @@ int ft_printf(const char* str, ...)
 	va_end(ap);
 
 	return i;
-}
-
-int main()
-{
-	unsigned int ptr;
-	unsigned int rtp;
-
-	ft_printf("%d \n", ft_printf("Repolho: %p \t %p\n", &ptr, &rtp));
-	  
-	printf("%d \n", printf("Repolho: %p \t %p\n", &ptr, &rtp));
 }
