@@ -18,7 +18,7 @@ $(NAME):$(OBJS)
 	ar -rcs $(NAME) $(OBJS)
 
 $(OBJS):$(SRC)
-	clang -c $(CFLAGS) $(SRC)
+	gcc -c $(CFLAGS) $(SRC)
 
 clean:
 	rm -f $(OBJS)
