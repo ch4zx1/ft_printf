@@ -6,7 +6,7 @@
 /*   By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 17:37:55 by cfischer          #+#    #+#             */
-/*   Updated: 2022/06/23 23:50:41 by cfischer         ###   ########.fr       */
+/*   Updated: 2022/06/25 23:06:07 by cfischer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ int	checker_str(int flag, va_list ap)
 
 int	checker_num(int flag, va_list ap)
 {
-	int					i;
-	char				*s;
+	int		i;
+	char	*s;
 
 	i = 0;
 	if (flag == 'd' || flag == 'i')
