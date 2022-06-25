@@ -6,17 +6,18 @@
 /*   By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/30 16:27:15 by cfischer          #+#    #+#             */
-/*   Updated: 2021/09/19 16:39:09 by cfischer         ###   ########.fr       */
+/*   Updated: 2022/06/25 21:11:19 by cfischer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <limits.h>
+
+# define INT_MAX 2147483647
+# define INT_MIN -2147483648
 
 /**
  * @brief fills the first n bytes of the memory
