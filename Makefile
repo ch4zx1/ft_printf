@@ -1,17 +1,26 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cfischer <cfischer@student.42sp.org.br>    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/06/25 03:19:39 by cfischer          #+#    #+#              #
+#    Updated: 2022/06/25 03:19:43 by cfischer         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = libftprintf.a
 
 CC = gcc
 
-INCLUDE = -I ./includes
+INCLUDE = -I ./
 
 CFLAGS = -Wall -Werror -Wextra $(INCLUDE)
 
-SRC = ./
+SRC = ft_printf.c utils.c
 
-MAIN = $(addprefix $(SRC), \
-	ft_printf.c utils.c)
-
-OBJ = $(MAIN:%.c=%.o)
+OBJ = $(SRC:%.c=%.o)
 
 $(NAME): $(OBJ)
 	make all -C ./libft
@@ -31,3 +40,5 @@ fclean:	clean
 	make fclean -C ./libft
 
 re:	fclean all
+
+.PHONY: all clean fclean re
